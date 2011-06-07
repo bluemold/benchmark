@@ -1,0 +1,35 @@
+package test.bluemold.benchmark
+
+import junit.framework.{TestSuite, Test, TestCase}
+import bluemold.benchmark.branching.{AkkaBranching, RegisteredBranching, SimpleBranching, ScalazBranching}
+
+/**
+ * TestAllBranching<br/>
+ * Author: Neil Essy<br/>
+ * Created: 6/6/11<br/>
+ * <p/>
+ * [Description]
+ */
+
+object TestAllBranching {
+  def suite: Test = {
+      val suite = new TestSuite(classOf[TestAllBranching]);
+      suite
+  }
+
+  def main(args : Array[String]) {
+      junit.textui.TestRunner.run(suite);
+  }
+}  
+
+
+class TestAllBranching extends TestCase("branching benchmarks") {
+
+  def testAll() {
+    val noArgs = new Array[String](0)
+    ScalazBranching.main( noArgs )
+    SimpleBranching.main( noArgs )
+    RegisteredBranching.main( noArgs )
+    AkkaBranching.main( noArgs )
+  }
+}
