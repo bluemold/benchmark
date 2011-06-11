@@ -25,7 +25,7 @@ object SimpleRing {
     println( "Number of Actors = " + numNodes.formatted( "%,d" ) )
     println( "Number of Messages = " + ( numNodes * numMsgs).formatted( "%,d" ) )
 
-    val myActor = new SimpleRing().start()
+    val myActor = new SimpleRing( Actor.defaultStrategy ).start()
 
     val rt = Runtime.getRuntime
 
@@ -64,9 +64,11 @@ object SimpleRing {
     stopLatch.await()
 
     println( "Stopped" )
+    
+    Actor.defaultFactory.printStats()
   }
 }
-class SimpleRing( implicit _strategy: ActorStrategy ) extends SimpleActor()( _strategy ) {
+class SimpleRing( _strategy: ActorStrategy ) extends SimpleActor()( _strategy ) {
   import SimpleRing._
 
   var nextActor: ActorRef = null
@@ -82,7 +84,7 @@ class SimpleRing( implicit _strategy: ActorStrategy ) extends SimpleActor()( _st
             firstActors.set( index, self )
           if ( nextActor != null )
             throw new RuntimeException( "if already created the next actor" );
-          else nextActor = new SimpleRing().start()
+          else nextActor = new SimpleRing( getNextStrategy() ).start()
           nextActor ! ( count - 1 )
         } else {
           creationLatch.countDown()
