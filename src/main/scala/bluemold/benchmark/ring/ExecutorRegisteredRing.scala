@@ -13,7 +13,7 @@ import java.util.concurrent.CountDownLatch
  * [Description]
  */
 
-object RegisteredRing {
+object ExecutorRegisteredRing {
   val numNodes = 100000
   val numMsgs = 500
   val firstActors = new AtomicReferenceArray[ActorRef]( numMsgs )
@@ -22,11 +22,14 @@ object RegisteredRing {
   val stopLatch = new CountDownLatch(1)
 
   def main( args: Array[String] ) {
-    println( "***** Benchmark: Ring - BlueMold ( Registered )" )
+    val strategyFactory = new ExecutorStrategyFactory()
+    implicit val strategy: ActorStrategy = strategyFactory.getStrategy
+
+    println( "***** Benchmark: Ring - BlueMold Executor ( Registered )" )
     println( "Number of Actors = " + numNodes.formatted( "%,d" ) )
     println( "Number of Messages = " + ( numNodes * numMsgs).formatted( "%,d" ) )
 
-    val myActor = actorOf( new RegisteredRing() ).start()
+    val myActor = actorOf( new ExecutorRegisteredRing() ).start()
 
     val rt = Runtime.getRuntime
     
@@ -66,17 +69,22 @@ object RegisteredRing {
 
     stopLatch.await()
     
-    println( "Remaining Registered Actors: " + Cluster.getDefaultCluster.getCount )
-    println( "Remaining Registered Ids: " + Cluster.getDefaultCluster.getIdCount )
-    println( "Remaining Registered ClassNames: " + Cluster.getDefaultCluster.getClassNameCount )
-    println( "Remaining Registered Actors by Id: " + Cluster.getDefaultCluster.getIdTotal )
-    println( "Remaining Registered Actors by ClassNames: " + Cluster.getDefaultCluster.getClassNameTotal )
+    println( "Remaining Registered Actors: " + strategy.getCluster.getCount )
+    println( "Remaining Registered Ids: " + strategy.getCluster.getIdCount )
+    println( "Remaining Registered ClassNames: " + strategy.getCluster.getClassNameCount )
+    println( "Remaining Registered Actors by Id: " + strategy.getCluster.getIdTotal )
+    println( "Remaining Registered Actors by ClassNames: " + strategy.getCluster.getClassNameTotal )
+
+    strategyFactory.printStats()
+
+    strategyFactory.shutdownNow()
+    strategyFactory.waitForShutdown()
 
     println( "Stopped" )
   }
 }
-class RegisteredRing extends RegisteredActor {
-  import RegisteredRing._
+class ExecutorRegisteredRing extends RegisteredActor {
+  import ExecutorRegisteredRing._
 
   var nextActor: ActorRef = _
 
@@ -90,7 +98,7 @@ class RegisteredRing extends RegisteredActor {
             firstActors.set( index, self )
           if ( nextActor != null )
             throw new RuntimeException( "if already created the next actor" );
-          else nextActor = actorOf( new RegisteredRing() ).start()
+          else nextActor = actorOf( new ExecutorRegisteredRing() ).start()
           nextActor ! ( count - 1 )
         } else {
           creationLatch.countDown()
@@ -104,13 +112,15 @@ class RegisteredRing extends RegisteredActor {
         }
       }
       case "stop" => {
-        if ( nextActor != null )
+        if ( nextActor != null ) {
           nextActor ! "stop"
-        else {
+          nextActor = null
+          self.stop()
+        } else {
+          nextActor = null
+          self.stop()
           stopLatch.countDown()
         }
-        nextActor = null
-        self.stop()
       }
       case msg: Any => println( msg )
   }

@@ -32,6 +32,8 @@ class TestAllRing extends TestCase("ring benchmarks") {
     ScalazRing.main( noArgs )
     SimpleRing.main( noArgs )
     RegisteredRing.main( noArgs )
+    ExecutorSimpleRing.main( noArgs )
+    ExecutorRegisteredRing.main( noArgs )
     AkkaRing.main( noArgs )
   }
 }
