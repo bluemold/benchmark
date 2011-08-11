@@ -1,7 +1,7 @@
 package test.bluemold.benchmark
 
 import junit.framework.{TestSuite, Test, TestCase}
-import bluemold.benchmark.branching.{AkkaBranching, RegisteredBranching, SimpleBranching, ScalazBranching}
+import bluemold.benchmark.branching._
 
 /**
  * TestAllBranching<br/>
@@ -30,6 +30,8 @@ class TestAllBranching extends TestCase("branching benchmarks") {
     ScalazBranching.main( noArgs )
     SimpleBranching.main( noArgs )
     RegisteredBranching.main( noArgs )
+    ExecutorSimpleBranching.main( noArgs )
+    ExecutorRegisteredBranching.main( noArgs )
     AkkaBranching.main( noArgs )
   }
 }
