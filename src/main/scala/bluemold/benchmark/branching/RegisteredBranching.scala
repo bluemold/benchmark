@@ -70,6 +70,12 @@ object RegisteredBranching {
     myActor ! "stop"
     stopLatch.await()
 
+    println( "Remaining Registered Actors: " + Cluster.getDefaultCluster.getCount )
+    println( "Remaining Registered Ids: " + Cluster.getDefaultCluster.getIdCount )
+    println( "Remaining Registered ClassNames: " + Cluster.getDefaultCluster.getClassNameCount )
+    println( "Remaining Registered Actors by Ids: " + Cluster.getDefaultCluster.getIdTotal )
+    println( "Remaining Registered Actors by ClassNames: " + Cluster.getDefaultCluster.getClassNameTotal )
+
     println( "Stopped" )
   }
 }
@@ -134,11 +140,11 @@ class RegisteredBranching extends RegisteredActor {
           leftActor ! "stop"
         if ( rightActor != null )
           rightActor ! "stop"
-        stopLatch.countDown()
         parent = null
         leftActor = null
         rightActor = null
         self.stop()
+        stopLatch.countDown()
       }
       case msg: Any => println( msg )
   }
