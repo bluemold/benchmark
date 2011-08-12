@@ -30,6 +30,8 @@ class TestAllBranching extends TestCase("branching benchmarks") {
     ScalazBranching.main( noArgs )
     SimpleBranching.main( noArgs )
     RegisteredBranching.main( noArgs )
+    StickySimpleBranching.main( noArgs )
+    StickyRegisteredBranching.main( noArgs )
     ExecutorSimpleBranching.main( noArgs )
     ExecutorRegisteredBranching.main( noArgs )
     AkkaBranching.main( noArgs )
