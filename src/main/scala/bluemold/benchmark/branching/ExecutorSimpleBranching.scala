@@ -72,6 +72,8 @@ object ExecutorSimpleBranching {
     myActor ! "stop"
     stopLatch.await()
 
+    strategyFactory.printStats()
+
     strategyFactory.shutdownNow()
     strategyFactory.waitForShutdown()
 
