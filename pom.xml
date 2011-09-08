@@ -70,6 +70,11 @@
         <artifactId>concurrent</artifactId>
         <version>0.1</version>
       </dependency>
+    <dependency>
+      <groupId>org.bluemold</groupId>
+      <artifactId>stm</artifactId>
+      <version>0.1</version>                                          w
+    </dependency>
       <dependency>
         <groupId>org.bluemold</groupId>
         <artifactId>unsafe</artifactId>
