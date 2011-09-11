@@ -4,13 +4,13 @@
   <groupId>org.bluemold</groupId>
   <artifactId>benchmark</artifactId>
   <version>0.1</version>
-  <inceptionYear>2011</inceptionYear>
+  <inceptionYear>2011</inceptionYear>                                                    
 
     <name>benchmark</name>
     <url>http://bluemold.org/benchmark</url>
 
   <properties>
-    <scala.version>2.8.1</scala.version>
+    <scala.version>2.9.1</scala.version>
   </properties>
 
   <repositories>
@@ -27,7 +27,7 @@
       <repository>
           <id>jetlang.googlecode.com</id>
           <name>Jetlang Repository for Maven</name>
-          <url>http://jetlang.googlecode.com/svn/repo/</url>
+          <url>http://jetlang.googlecode.com/svn/repo</url>
       </repository>
     <repository>
       <id>akka.repository</id>
@@ -48,7 +48,7 @@
       <dependency>
           <groupId>se.scalablesolutions.akka</groupId>
           <artifactId>akka</artifactId>
-          <version>1.0</version>
+          <version>1.2-RC6</version>
       </dependency>
       <dependency>
           <groupId>org.jetlang</groupId>
@@ -73,7 +73,7 @@
     <dependency>
       <groupId>org.bluemold</groupId>
       <artifactId>stm</artifactId>
-      <version>0.1</version>                                          w
+      <version>0.1</version>
     </dependency>
       <dependency>
         <groupId>org.bluemold</groupId>
