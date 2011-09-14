@@ -1,6 +1,5 @@
 package bluemold.benchmark.ring
 
-import akka.util.Logging
 import akka.actor.{Actor, ActorRef}
 import akka.actor.Actor._
 import java.util.concurrent.CountDownLatch
@@ -13,7 +12,7 @@ import java.util.concurrent.CountDownLatch
  * [Description]
  */
 
-object AkkaRing extends Logging {
+object AkkaRing {
   val numNodes = 10000
   val numMsgs = 500
   val latch = new CountDownLatch(numMsgs)
