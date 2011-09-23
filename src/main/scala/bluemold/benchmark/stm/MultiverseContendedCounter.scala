@@ -1,6 +1,5 @@
 package bluemold.benchmark.stm
 
-import org.multiverse.transactional.refs.LongRef
 import org.multiverse.api.GlobalStmInstance._
 import org.multiverse.stms.alpha.AlphaStm
 
@@ -11,7 +10,7 @@ object MultiverseContendedCounter {
 
   val maxCounter = 10000000L
   val counter = refFactory.atomicCreateLongRef( 0L )
-  val counter2 = refFactory.atomicCreateLongRef( 0L )
+
   def main( args: Array[String] ) {
     val threadA = new Thread( new Counting )
     val threadB = new Thread( new Counting )
@@ -28,11 +27,12 @@ object MultiverseContendedCounter {
   class Counting extends Runnable {
 //    val counter = new LongRef( 0L )
     def run() {
-      while ( counter.get() < maxCounter ) {
+      var currently = 0L
+      while ( currently < maxCounter ) {
         val t = transFactory.start()
         try {
           counter.inc( 1 )
-//          counter2.inc( 1 )
+          currently = counter.get()
         } finally {
           t.commit()
         }

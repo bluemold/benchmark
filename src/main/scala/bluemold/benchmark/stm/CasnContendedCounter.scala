@@ -5,7 +5,6 @@ import bluemold.concurrent.casn.{CasnVar,CasnSequence}
 object CasnContendedCounter {
   val maxCounter = 10000000L
   val counter = new CasnVar( 0L )
-  val counter2 = new CasnVar( 0L )
   def main( args: Array[String] ) {
     val threadA = new Thread( new Counting )
     val threadB = new Thread( new Counting )
@@ -22,11 +21,14 @@ object CasnContendedCounter {
   class Counting extends Runnable {
 //    val counter = new CasnVar( 0L )
     def run() {
-      while ( counter.getValue < maxCounter ) {
+      var currently = 0L
+      while ( currently < maxCounter ) {
         CasnSequence
         .update( counter, ( value: Long ) => value + 1 )
-//        .update( counter2, ( value: Long ) => value + 1 )
-        .execute()
+        .executeOption() match {
+          case Some( value ) => currently = value
+          case None => // try again
+        }
       }
     }
   }
