@@ -3,7 +3,7 @@ package bluemold.benchmark.stm
 import akka.stm._
 
 object AkkaContendedCounter {
-  val maxCounter = 1000000L
+  val maxCounter = 10000000L
   val counter = Ref( 0L )
   def main( args: Array[String] ) {
     val threadA = new Thread( new Counting )
