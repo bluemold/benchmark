@@ -70,11 +70,11 @@ object RegisteredBranching {
     myActor ! "stop"
     stopLatch.await()
 
-    println( "Remaining Registered Actors: " + Cluster.getDefaultCluster.getCount )
-    println( "Remaining Registered Ids: " + Cluster.getDefaultCluster.getIdCount )
-    println( "Remaining Registered ClassNames: " + Cluster.getDefaultCluster.getClassNameCount )
-    println( "Remaining Registered Actors by Ids: " + Cluster.getDefaultCluster.getIdTotal )
-    println( "Remaining Registered Actors by ClassNames: " + Cluster.getDefaultCluster.getClassNameTotal )
+    println( "Remaining Registered Actors: " + Node.getDefaultNode.getCount )
+    println( "Remaining Registered Ids: " + Node.getDefaultNode.getIdCount )
+    println( "Remaining Registered ClassNames: " + Node.getDefaultNode.getClassNameCount )
+    println( "Remaining Registered Actors by Ids: " + Node.getDefaultNode.getIdTotal )
+    println( "Remaining Registered Actors by ClassNames: " + Node.getDefaultNode.getClassNameTotal )
 
     println( "Stopped" )
   }

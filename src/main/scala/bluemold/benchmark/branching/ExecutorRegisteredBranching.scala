@@ -73,11 +73,11 @@ object ExecutorRegisteredBranching {
     myActor ! "stop"
     stopLatch.await()
 
-    println( "Remaining Registered Actors: " + strategy.getCluster.getCount )
-    println( "Remaining Registered Ids: " + strategy.getCluster.getIdCount )
-    println( "Remaining Registered ClassNames: " + strategy.getCluster.getClassNameCount )
-    println( "Remaining Registered Actors by Id: " + strategy.getCluster.getIdTotal )
-    println( "Remaining Registered Actors by ClassNames: " + strategy.getCluster.getClassNameTotal )
+    println( "Remaining Registered Actors: " + strategy.getNode.getCount )
+    println( "Remaining Registered Ids: " + strategy.getNode.getIdCount )
+    println( "Remaining Registered ClassNames: " + strategy.getNode.getClassNameCount )
+    println( "Remaining Registered Actors by Id: " + strategy.getNode.getIdTotal )
+    println( "Remaining Registered Actors by ClassNames: " + strategy.getNode.getClassNameTotal )
 
     strategyFactory.shutdownNow()
     strategyFactory.waitForShutdown()
