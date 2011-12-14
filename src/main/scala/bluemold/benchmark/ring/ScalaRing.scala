@@ -15,8 +15,8 @@ object ScalaRing {
  def main(args: Array[String]) {
    println( "***** Benchmark: Ring - Scala" )
 
-   val numNodes = 10000
-   val numMsgs = 5
+   val numNodes = CommonRingParams.numNodes / 100
+   val numMsgs = CommonRingParams.numMsgs / 100
 
    println( "Number of Actors = " + numNodes.formatted( "%,d" ) )
    println( "Number of Messages = " + ( numNodes * numMsgs).formatted( "%,d" ) )

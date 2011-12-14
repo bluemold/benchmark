@@ -13,8 +13,8 @@ import java.util.concurrent.CountDownLatch
  */
 
 object AkkaOccasionallySlowRing {
-  val numNodes = 200000
-  val numMsgs = 20
+  val numNodes = CommonRingParams.numNodesOS
+  val numMsgs = CommonRingParams.numMsgsOS
   val latch = new CountDownLatch(numMsgs)
   val createLatch = new CountDownLatch(1)
   val stopLatch = new CountDownLatch(1)

@@ -13,8 +13,8 @@ import java.util.concurrent.CountDownLatch
  */
 
 object StickySimpleRing {
-  val numNodes = 100000
-  val numMsgs = 500
+  val numNodes = CommonRingParams.numNodes
+  val numMsgs = CommonRingParams.numMsgs
   val firstActors = new AtomicReferenceArray[ActorRef]( numMsgs )
   val creationLatch = new CountDownLatch(1)
   val messagesLatch = new CountDownLatch(numMsgs)

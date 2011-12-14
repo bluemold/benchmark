@@ -17,8 +17,8 @@ object JetlangRing {
   def main( args: Array[String] ) {
     println( "***** Benchmark: Ring - Jetlang" )
 
-    val numNodes = 100000
-    val numMsgs = 500
+    val numNodes = CommonRingParams.numNodes
+    val numMsgs = CommonRingParams.numMsgs
     
     println( "Number of Actors = " + numNodes.formatted( "%,d" ) )
     println( "Number of Messages = " + ( numNodes * numMsgs).formatted( "%,d" ) )
@@ -64,7 +64,7 @@ object JetlangRing {
     for( i <- 0 until numMsgs ) {
         channels(i).publish("Hi")
     }
-    assert(cdl.await(100,TimeUnit.SECONDS))
+    assert(cdl.await(300,TimeUnit.SECONDS))
 
     val end = System.currentTimeMillis()
 
