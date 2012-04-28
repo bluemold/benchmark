@@ -13,17 +13,18 @@ import java.util.concurrent.CountDownLatch
  */
 
 object SimpleRing {
-  val numNodes = 100000
-  val numMsgs = 500
+  val numNodes = CommonRingParams.numNodes
+  val numMsgs = CommonRingParams.numMsgs
   val firstActors = new AtomicReferenceArray[ActorRef]( numMsgs )
   val creationLatch = new CountDownLatch(1)
   val messagesLatch = new CountDownLatch(numMsgs)
   val stopLatch = new CountDownLatch(1)
 
   def main( args: Array[String] ) {
+    val totalMsgs = numNodes * numMsgs - ( numMsgs * numMsgs / 2 )
     println( "***** Benchmark: Ring - BlueMold ( Simple )" )
     println( "Number of Actors = " + numNodes.formatted( "%,d" ) )
-    println( "Number of Messages = " + ( numNodes * numMsgs).formatted( "%,d" ) )
+    println( "Number of Messages = " + totalMsgs.formatted( "%,d" ) )
 
     val myActor = new SimpleRing( Actor.defaultStrategy ).start()
 
@@ -54,7 +55,7 @@ object SimpleRing {
     val end = System.currentTimeMillis()
 
     val elapsed = end - start
-    var msgs: Double = numNodes * numMsgs
+    var msgs: Double = totalMsgs
     msgs /= elapsed
     msgs /= 1000 // this makes it millions per second since elapsed is in ms
     println( "Elapsed = " + elapsed + " ms")

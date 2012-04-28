@@ -13,8 +13,8 @@ import java.util.concurrent.CountDownLatch
  */
 
 object AkkaRing {
-  val numNodes = 10000
-  val numMsgs = 500
+  val numNodes = CommonRingParams.numNodes / 10
+  val numMsgs = CommonRingParams.numMsgs
   val latch = new CountDownLatch(numMsgs)
   val createLatch = new CountDownLatch(1)
   val stopLatch = new CountDownLatch(1)

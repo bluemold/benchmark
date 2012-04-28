@@ -20,8 +20,8 @@ object ScalazRing {
     implicit val pool = Executors.newFixedThreadPool(5)
     implicit val s = Strategy.Executor
 
-    val numNodes = 100000
-    val numMsgs = 500
+    val numNodes = CommonRingParams.numNodes
+    val numMsgs = CommonRingParams.numMsgs
     val latch = new CountDownLatch(numMsgs)
 
     println( "Number of Actors = " + numNodes.formatted( "%,d" ) )
