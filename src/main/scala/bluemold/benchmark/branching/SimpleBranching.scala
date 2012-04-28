@@ -75,6 +75,8 @@ object SimpleBranching {
 class SimpleBranching( implicit _strategy: ActorStrategy ) extends SimpleActor()( _strategy ) {
   import SimpleBranching._
 
+  override def isTailMessaging = true
+
   var accBounces: Int = _
   var firstReply: Int = _
   var parent: ActorRef = _ 
