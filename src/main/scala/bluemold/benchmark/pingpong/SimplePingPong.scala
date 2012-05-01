@@ -6,7 +6,9 @@ import bluemold.actor.{SimpleActor, ActorStrategy, ActorRef, Actor}
 
 object SimplePingPong {
   val throughput = 10
-  val numPairs = Runtime.getRuntime.availableProcessors()
+  val numProcessors = Runtime.getRuntime.availableProcessors()
+  val splicing = 256;
+  val numPairs = numProcessors * splicing
   val numActors = numPairs * 2
   case object Run
   case object Msg
@@ -17,7 +19,7 @@ object SimplePingPong {
 
     override def isTailMessaging = true
     override protected def staticBehavior( msg: Any ) {
-      reply( Msg )
+      reply( msg )
     }
     def exposeStrategy = currentStrategy 
   }
@@ -59,7 +61,7 @@ object SimplePingPong {
   }
 
   def main( args: Array[String] ) {
-    val iterations = 10000000
+    val iterations = 800000L
     val latch = new CountDownLatch(numPairs);
     val dests = Array.fill(numPairs)( new Destination( Actor.defaultStrategy ) )
     val clients = dests map { dest => new Client( dest.exposeStrategy, dest, latch, iterations ).start() }
