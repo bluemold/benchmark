@@ -1,7 +1,7 @@
 package bluemold.benchmark.pingpong
 
 import java.util.concurrent.CountDownLatch
-import bluemold.actor.{SimpleActor, ActorStrategy, ActorRef, Actor}
+import bluemold.actor._
 
 
 object SimplePingPong {
@@ -18,8 +18,9 @@ object SimplePingPong {
     protected def react = null
 
     override def isTailMessaging = true
-    override protected def staticBehavior( msg: Any ) {
-      reply( msg )
+    override protected final def staticBehavior( msg: Any ) {
+//      sender.issueReply( msg )
+        reply( msg )
     }
     def exposeStrategy = currentStrategy 
   }
@@ -40,8 +41,8 @@ object SimplePingPong {
       received = 0L
     }
     protected def react = null
-    override def isTailMessaging = true
-    override protected def staticBehavior( msg: Any ) {
+    override def _isTailMessaging = true
+    override protected final def staticBehavior( msg: Any ) {
       if ( msg == Msg ) {
         received += 1
         if (sent < repeat) {
@@ -63,7 +64,8 @@ object SimplePingPong {
   def main( args: Array[String] ) {
     val iterations = 800000L
     val latch = new CountDownLatch(numPairs);
-    val dests = Array.fill(numPairs)( new Destination( Actor.defaultStrategy ) )
+    val strategyFactory = new FiberStrategyFactory()
+    val dests = Array.fill(numPairs)( new Destination( strategyFactory.getStrategy ) )
     val clients = dests map { dest => new Client( dest.exposeStrategy, dest, latch, iterations ).start() }
     dests foreach { _.start }
     val start = System.currentTimeMillis()
@@ -80,5 +82,6 @@ object SimplePingPong {
     println( "Duration: " + milliseconds + "ms" )
     println( "Messages: " + numMessages )
     println( "Million Messages per second: " + rateInMillions )
+    strategyFactory.printStats()
   }
 }

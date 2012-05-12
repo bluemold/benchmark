@@ -74,6 +74,8 @@ class SimpleRing( _strategy: ActorStrategy ) extends SimpleActor()( _strategy ) 
 
   var nextActor: ActorRef = null
 
+  override def isTailMessaging = true
+
   protected def init() {}
   protected def react = null
   override protected def staticBehavior( msg: Any ) {

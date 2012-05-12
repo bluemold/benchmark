@@ -15,8 +15,8 @@ import java.util.concurrent.CountDownLatch
 
 object SimpleBranching {
   def getLeaves( acc: Int, level: Int ): Int = if ( level == 0 ) acc else getLeaves( acc * 2, level - 1 )
-  val numBounces = 5
-  val numLevels = 19
+  val numBounces = 10
+  val numLevels = 21
   val numLeaves = getLeaves( 1, numLevels )
   val numActors = numLeaves * 2 - 1
   val numMessages = numActors * numBounces * 2
@@ -38,7 +38,7 @@ object SimpleBranching {
     val usedBeforeCreation = rt.totalMemory() - rt.freeMemory()
     println( "Used memory before creation: " + usedBeforeCreation )
 
-    val myActor = new SimpleBranching().start()
+    val myActor = new SimpleBranching( Actor.defaultStrategy ).start()
     myActor ! (( "create", myActor, numLevels ))
     creationLatch.await()
 
@@ -72,7 +72,7 @@ object SimpleBranching {
     println( "Stopped" )
   }
 }
-class SimpleBranching( implicit _strategy: ActorStrategy ) extends SimpleActor()( _strategy ) {
+class SimpleBranching( _strategy: ActorStrategy ) extends SimpleActor()( _strategy ) {
   import SimpleBranching._
 
   override def isTailMessaging = true
@@ -96,10 +96,10 @@ class SimpleBranching( implicit _strategy: ActorStrategy ) extends SimpleActor()
         if ( count > 0 ) {
           if ( leftActor != null )
             throw new RuntimeException( "if already created the left actor" );
-          else leftActor = new SimpleBranching()(getNextStrategy()).start()
+          else leftActor = new SimpleBranching(getNextStrategy()).start()
           if ( rightActor != null )
             throw new RuntimeException( "if already created the right actor" );
-          else rightActor = new SimpleBranching()(getNextStrategy()).start()
+          else rightActor = new SimpleBranching(getNextStrategy()).start()
           leftActor ! (( "create", self, count - 1 ))
           rightActor ! (( "create", self ,count - 1 ))
         } else {
