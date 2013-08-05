@@ -10,29 +10,34 @@
     <url>http://bluemold.org/benchmark</url>
 
   <properties>
-    <scala.version>2.9.2</scala.version>
+    <scala.version>2.10.0</scala.version>
   </properties>
 
   <repositories>
-      <repository>
-        <id>bluemold.org</id>
-        <name>BlueMold Maven2 Repository</name>
-        <url>http://bluemold.org/repo-releases</url>
-      </repository>
+    <repository>
+      <id>bluemold.org</id>
+      <name>BlueMold Maven2 Repository</name>
+      <url>http://bluemold.org/repo-releases</url>
+    </repository>
     <repository>
       <id>scala-tools.org</id>
       <name>Scala-Tools Maven2 Repository</name>
       <url>https://oss.sonatype.org/content/groups/scala-tools</url>
     </repository>
-      <repository>
-          <id>jetlang.googlecode.com</id>
-          <name>Jetlang Repository for Maven</name>
-          <url>http://jetlang.googlecode.com/svn/repo</url>
-      </repository>
     <repository>
-      <id>akka.repository</id>
-      <name>Akka Maven Repository</name>
-      <url>http://akka.io/repository</url>
+      <id>jetlang.googlecode.com</id>
+      <name>Jetlang Repository for Maven</name>
+      <url>http://jetlang.googlecode.com/svn/repo</url>
+    </repository>
+    <repository>
+      <id>typesafe</id>
+      <name>Typesafe Repository</name>
+      <url>http://repo.typesafe.com/typesafe/releases/</url>
+    </repository>
+    <repository>
+      <id>codehaus</id>
+      <name>Codehaus Release Repo</name>
+      <url>http://dist.codehaus.org/</url>
     </repository>
   </repositories>
 
@@ -46,19 +51,19 @@
 
   <dependencies>
       <dependency>
-          <groupId>se.scalablesolutions.akka</groupId>
-          <artifactId>akka</artifactId>
-          <version>1.2-RC6</version>
+          <groupId>com.typesafe.akka</groupId>
+          <artifactId>akka-actor_2.10</artifactId>
+          <version>2.1.0</version>
       </dependency>
       <dependency>
           <groupId>org.jetlang</groupId>
           <artifactId>jetlang</artifactId>
           <version>0.2.5</version>
-      </dependency>
+      </dependency>  
       <dependency>
         <groupId>org.scalaz</groupId>
-        <artifactId>scalaz-core_2.8.1</artifactId>
-        <version>6.0.RC2</version>
+        <artifactId>scalaz-core_2.10</artifactId>
+        <version>6.0.4</version>
       </dependency>
       <dependency>
         <groupId>org.bluemold</groupId>
@@ -75,12 +80,22 @@
       <artifactId>stm</artifactId>
       <version>0.1</version>
     </dependency>
-      <dependency>
-        <groupId>org.bluemold</groupId>
-        <artifactId>unsafe</artifactId>
-        <version>0.1</version>
-      </dependency>
     <dependency>
+      <groupId>org.multiverse</groupId>
+      <artifactId>multiverse-core</artifactId>
+      <version>0.7.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bluemold</groupId>
+      <artifactId>unsafe</artifactId>
+      <version>0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.scala-stm</groupId>
+      <artifactId>scala-stm_2.10</artifactId>
+      <version>0.7</version>
+    </dependency>
+      <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
       <version>${scala.version}</version>
@@ -88,7 +103,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.1</version>
+      <version>4.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
