@@ -1,8 +1,9 @@
 package bluemold.benchmark.ring
 
-import akka.actor.{Actor, ActorRef}
+import akka.actor._
 import akka.actor.Actor._
 import java.util.concurrent.CountDownLatch
+import scala.Some
 
 /**
  * AkkaRing<br/>
@@ -20,9 +21,10 @@ object AkkaOccasionallySlowRing {
   val stopLatch = new CountDownLatch(1)
   val actors = new Array[ActorRef]( numMsgs )
   def main(args: Array[String]) {
+    val totalMsgs = numNodes * numMsgs - ( numMsgs * numMsgs / 2 )
     println( "***** Benchmark: Occasionally Slow Ring - Akka (Hawt Dispatcher)" )
     println( "Number of Actors = " + numNodes.formatted( "%,d" ) )
-    println( "Number of Messages = " + ( numNodes * numMsgs).formatted( "%,d" ) )
+    println( "Number of Messages = " + totalMsgs.formatted( "%,d" ) )
 
     val rt = Runtime.getRuntime
 
@@ -32,7 +34,8 @@ object AkkaOccasionallySlowRing {
     val usedBeforeCreation = rt.totalMemory() - rt.freeMemory()
     println( "Used memory before creation: " + usedBeforeCreation )
 
-    val firstNode = actorOf( new AkkaOccasionallySlowRing(latch,numNodes)).start()
+    val system = ActorSystem.create()
+    val firstNode = system.actorOf( Props( new AkkaOccasionallySlowRing(latch,numNodes) ) )
     firstNode ! numNodes
     createLatch.await()
 
@@ -81,35 +84,32 @@ class AkkaOccasionallySlowRing( latch: CountDownLatch, numActors: Int ) extends 
         actors(id) = self
       }
       if ( count > 1 ) {
-        nextNode = actorOf( new AkkaOccasionallySlowRing(latch,numActors)).start()
+        nextNode = context.system.actorOf( Props( new AkkaOccasionallySlowRing(latch,numActors) ) )
         nextNode ! count - 1
       } else {
         createLatch.countDown()
       }
 
     case "stop" =>
-      if (nextNode != null && nextNode.isRunning ) {
+      if (nextNode != null && ! nextNode.isTerminated ) {
         nextNode ! "stop"
       } else {
         stopLatch.countDown()
       }
-      self.stop()
+      self ! PoisonPill
 
     case "hi" =>
       // Occasionally something slow
       if ( id > 0 && ( id % 10000 == 0 ) && ! hasBeenSlowYet ) {
         hasBeenSlowYet = true
-        val offLoad = actorOf( new Actor {
+        val offLoad = context.system.actorOf( Props( new Actor {
           def receive = { case msg: Any =>
             var longNoOp = 0
             1 to 10000000 foreach { i => longNoOp += 1 } // takes approx. one tenth of a second
-            self.sender match {
-              case Some( sender ) => sender ! msg
-              case None => throw new RuntimeException( "What Happened?" )
-            }
-            self.stop()
+            if ( context.sender ne null ) context.sender ! msg
+            self ! PoisonPill
           }
-        }).start()
+        } ) )
         offLoad ! "hi"
       } else {
         // Normal ring behavior

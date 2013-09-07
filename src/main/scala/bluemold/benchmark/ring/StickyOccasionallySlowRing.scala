@@ -28,9 +28,10 @@ object StickyOccasionallySlowRing {
     val strategyFactory = new StickyStrategyFactory()
     implicit val strategy: ActorStrategy = strategyFactory.getStrategy
 
+    val totalMsgs = numNodes * numMsgs - ( numMsgs * numMsgs / 2 )
     println( "***** Benchmark: Occasionally Slow Ring - BlueMold Sticky ( Simple )" )
     println( "Number of Actors = " + numNodes.formatted( "%,d" ) )
-    println( "Number of Messages = " + ( numNodes * numMsgs).formatted( "%,d" ) )
+    println( "Number of Messages = " + totalMsgs.formatted( "%,d" ) )
 
     val myActor = new StickyOccasionallySlowRing( strategy ).start()
 

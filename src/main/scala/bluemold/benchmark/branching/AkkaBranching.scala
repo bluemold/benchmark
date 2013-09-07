@@ -1,6 +1,6 @@
 package bluemold.benchmark.branching
 
-import akka.actor.{Actor, ActorRef}
+import akka.actor._
 import akka.actor.Actor._
 import java.util.concurrent.CountDownLatch
 
@@ -39,7 +39,8 @@ object AkkaBranching {
     val usedBeforeCreation = rt.totalMemory() - rt.freeMemory()
     println( "Used memory before creation: " + usedBeforeCreation )
 
-    val myActor = actorOf( new AkkaBranching() ).start()
+    val system = ActorSystem.create()
+    val myActor = system.actorOf( Props( new AkkaBranching() ) )
     myActor ! (( "create", myActor, numLevels ))
     creationLatch.await()
 
@@ -93,10 +94,10 @@ class AkkaBranching extends Actor {
         if ( count > 0 ) {
           if ( leftActor != null )
             throw new RuntimeException( "if already created the left actor" );
-          else leftActor = actorOf( new AkkaBranching ).start()
+          else leftActor = context.system.actorOf( Props( new AkkaBranching ) )
           if ( rightActor != null )
             throw new RuntimeException( "if already created the right actor" );
-          else rightActor = actorOf( new AkkaBranching ).start()
+          else rightActor = context.system.actorOf( Props( new AkkaBranching ) )
           leftActor ! (( "create", self, count - 1 ))
           rightActor ! (( "create", self ,count - 1 ))
         } else {
@@ -138,7 +139,7 @@ class AkkaBranching extends Actor {
         parent = null
         leftActor = null
         rightActor = null
-        self.stop()
+        self ! PoisonPill
       }
       case msg: Any => println( msg )
   }

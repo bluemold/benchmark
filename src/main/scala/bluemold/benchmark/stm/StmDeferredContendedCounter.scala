@@ -15,6 +15,7 @@ object StmDeferredContendedCounter {
     threadB.join()
     val end = System.currentTimeMillis()
     val duration = end - start
+    System.out.println( getClass.getName )
     System.out.println( "Duration: " + duration + "ms" )
     System.out.println( "Transactions/Second: " + ( maxCounter * 1000 / duration ) )
   }

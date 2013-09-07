@@ -21,9 +21,10 @@ object OccasionallySlowRing {
   val stopLatch = new CountDownLatch(1)
 
   def main( args: Array[String] ) {
+    val totalMsgs = numNodes * numMsgs - ( numMsgs * numMsgs / 2 )
     println( "***** Benchmark: Occasionally Slow Ring - BlueMold ( Simple ) " )
     println( "Number of Actors = " + numNodes.formatted( "%,d" ) )
-    println( "Number of Messages = " + ( numNodes * numMsgs).formatted( "%,d" ) )
+    println( "Number of Messages = " + totalMsgs.formatted( "%,d" ) )
 
     val myActor = new OccasionallySlowRing( Actor.defaultStrategy ).start()
 
