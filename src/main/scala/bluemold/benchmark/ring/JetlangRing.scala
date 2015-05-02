@@ -17,7 +17,7 @@ object JetlangRing {
   def main( args: Array[String] ) {
     println( "***** Benchmark: Ring - Jetlang" )
 
-    val numNodes = CommonRingParams.numNodes
+    val numNodes = CommonRingParams.numNodes / 10
     val numMsgs = CommonRingParams.numMsgs
     
     println( "Number of Actors = " + numNodes.formatted( "%,d" ) )

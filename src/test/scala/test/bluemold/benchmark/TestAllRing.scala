@@ -28,7 +28,6 @@ class TestAllRing extends TestCase("ring benchmarks") {
   def testAll() {
     val noArgs = new Array[String](0)
     JetlangRing.main( noArgs )
-    ScalazRing.main( noArgs )
     SimpleRing.main( noArgs )
     RegisteredRing.main( noArgs )
     StickySimpleRing.main( noArgs )

@@ -27,7 +27,6 @@ class TestAllBranching extends TestCase("branching benchmarks") {
 
   def testAll() {
     val noArgs = new Array[String](0)
-    ScalazBranching.main( noArgs )
     SimpleBranching.main( noArgs )
     RegisteredBranching.main( noArgs )
     StickySimpleBranching.main( noArgs )
